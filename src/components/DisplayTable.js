@@ -6,11 +6,13 @@ import { getToDo } from '../redux/todo/toDo'
 import { deleteDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
 import { toast } from 'react-toastify'
+import { Link, useParams } from 'react-router-dom'
 
 const DisplayTable = () => {
+  
   const {todoInfo} = useSelector((state)=> state.toDo)
   const {userInfo} = useSelector((state)=>state.user)
-  console.log(userInfo.uid)
+  console.log(todoInfo)
   const dispatch = useDispatch()
 
   useEffect(()=>{
@@ -53,7 +55,7 @@ const DisplayTable = () => {
              <td>{i + 1}</td>
              <td>{item.todo}</td>
              <td>{item.date}</td>
-             <td className='text-center'><Button onClick={()=>handleOnDelete(item.id)}   variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
+             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/${item.globalId}`}><i class="fa-solid fa-pen-to-square"></i></Link><Button title='Delete ;; ' onClick={()=>handleOnDelete(item.id)}   variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
            </tr>
 
         ))}

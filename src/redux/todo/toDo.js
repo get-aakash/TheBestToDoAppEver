@@ -1,7 +1,7 @@
 import { QuerySnapshot, addDoc, collection, getDoc, getDocs, query, where } from "firebase/firestore"
 import { db } from "../../firebase/firebase-config"
 import { toast } from "react-toastify"
-import { create } from "../toDoSlice"
+import {  createTodo } from "../toDoSlice"
 
 
 export const getToDo =  (userId) => async(dispatch)=>{
@@ -17,7 +17,7 @@ export const getToDo =  (userId) => async(dispatch)=>{
         const data = {...doc.data(),id}
         value.push(data)
     })
-    dispatch(create(value))
+    dispatch(createTodo(value))
     
    } catch (error) {
     

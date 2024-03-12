@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import "../App.css"
 import DisplayTable from './DisplayTable'
 import { useDispatch, useSelector } from 'react-redux'
-import { create } from '../redux/toDoSlice'
+import {  createTodo } from '../redux/toDoSlice'
 import { getToDo, postToDO } from '../redux/todo/toDo'
 import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
 import { toast } from 'react-toastify'
 
-let globalId = 1
+let globalId = 0
 const initialState = {
     todo: "",
     date: "",
@@ -32,8 +32,8 @@ const InputForm = () => {
     }
     const handleOnsubmit = async(e) => {
         e.preventDefault()
-        
-        const obj = {...formData, userId: userInfo.uid, createdAt: Date.now()}
+        globalId = globalId+1
+        const obj = {...formData, userId: userInfo.uid, createdAt: Date.now(), globalId}
         
         console.log(obj)
         const docRef = await addDoc(collection(db, "todos"), obj)
@@ -49,8 +49,11 @@ const InputForm = () => {
         
 
     }
+    useEffect(()=>{
+        dispatch(createTodo(toDo))
+    },[dispatch])
    
-        dispatch(create(toDo))
+        
     
     
    
@@ -73,7 +76,10 @@ const InputForm = () => {
             </Form>
             <span className="d-block p-1 bg-info "></span>
             <div className="display">
-                <DisplayTable   />
+               
+<DisplayTable   />
+                    
+                
             </div>
         </div>
 
