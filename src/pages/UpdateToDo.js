@@ -3,8 +3,18 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getToDo } from '../redux/todo/toDo'
+import { addDoc, collection, updateDoc } from 'firebase/firestore'
+import { db } from '../firebase/firebase-config'
+import { toast } from 'react-toastify'
+import DefaultLayout from '../components/DefaultLayout'
 
 const UpdateToDo = () => {
+    const initialState = {
+        todo: "",
+        date: "",
+    
+    
+    }
     const [formData, setFormData] = useState({})
     const { id } = useParams()
     const dispatch = useDispatch()
@@ -15,24 +25,34 @@ const UpdateToDo = () => {
     const handleOnChange = (e) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
+    }
+    const handleOnSubmit = async(e)=>{
+        e.preventDefault()
+        console.log(formData)
+        const obj = {...formData}
+        const docRef = await updateDoc(collection(db, "todos"), obj)
 
-
+        if(docRef?.id){
+            setFormData(initialState)
+            dispatch(getToDo(data.userId))
+            toast.success("The todo has been updated!!!")
+        }
     }
    
     return (
 
-        <div>
-
-            <Form className=' wrapper p-4 text-center d-grid align-items-center justify-content-center' >
+        <DefaultLayout>
+            <h2 >Update Your Data Here!!!</h2>
+            <Form onSubmit={handleOnSubmit} className=' wrapper p-4 text-center d-grid align-items-center justify-content-center' >
                 <Col  >
                     <Row  >
-                        <Form.Control required name='todo' value={data.todo} placeholder="Enter Your ToDo here ..." onChange={handleOnChange} />
+                        <Form.Control required name='todo' value={formData.todo} defaultValue={data.todo} placeholder="Enter Your ToDo here ..." onChange={handleOnChange} />
                     </Row>
                     <Row>
-                        <Form.Control required type='date' name='date' value={data.date} placeholder="Date" onChange={handleOnChange} />
+                        <Form.Control required type='date' value={formData.date} name='date' defaultValue={data.date} placeholder="Date" onChange={handleOnChange} />
                     </Row>
                     <Row>
-                        <Button type='submit' variant='success'>Create</Button>
+                        <Button type='submit' variant='success'>Update</Button>
                     </Row>
 
                 </Col>
@@ -40,7 +60,7 @@ const UpdateToDo = () => {
 
 
 
-        </div>
+        </DefaultLayout>
     )
 }
 
