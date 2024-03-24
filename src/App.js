@@ -5,7 +5,6 @@ import Registration from './pages/Registration';
 import Dashboard from './pages/Dashboard';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import PrivateRoute from './components/PrivateRoute';
 import ForgetPassword from './pages/ForgetPassword';
 import UpdateToDo from './pages/UpdateToDo';
 
@@ -23,10 +22,9 @@ function App() {
       <Route path='/update/:id' element={<UpdateToDo />} />
       
       <Route path='dashboard' element={
-      <PrivateRoute>
+    
         <Dashboard />
-
-      </PrivateRoute>}/>
+}/>
       
 
     </Routes>
