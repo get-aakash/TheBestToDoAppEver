@@ -13,23 +13,35 @@ const initialState = {
 
 
 }
-const InputForm = async() => {
+const InputForm = () => {
     const [formData, setFormData] = useState(initialState)
     const [toDo, setToDO] = useState([])
-    let value=[]
-    try {
-        const q = query(collection(db, 'todos'))
-        const querySnapshot = await getDocs(q)
-        
-        querySnapshot.forEach((doc)=>{
-            const {id} = doc
-        const data = {...doc.data(),id}
-        toDo.push(data)
-        })
-    } catch (error) {
-        
-    }
+ 
+    
+    // useEffect(async()=>{
+    //     const fetchData = async()=>{
+    //         try {
+    //             const q = query(collection(db, 'todos'))
+    //             const querySnapshot = await getDocs(q)
+    //             console.log(querySnapshot)
+    //             querySnapshot.forEach((doc)=>{
+    //                 const {id} = doc
+    //             const data = {...doc.data(),id}
+    //             console.log(data)
+               
+    //            })
+    //         } catch (error) {
+    //             console.log(error.message)
+                
+    //         }
+    //     }
+    //     fetchData()
 
+    // },[])
+   
+
+ 
+    
     const handleOnchange = (e) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
@@ -81,7 +93,7 @@ const InputForm = async() => {
             <span className="d-block p-1 bg-info "></span>
             <div className="display">
 
-                <DisplayTable todo={toDo} handleOnDelete={handleOnDelete} />
+                <DisplayTable  handleOnDelete={handleOnDelete} />
 
 
             </div>
