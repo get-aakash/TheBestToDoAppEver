@@ -5,28 +5,10 @@ import { Button, Table } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase-config/firebaseConfig'
 
-const DisplayTable = ({ handleOnDelete}) => {
-  const [todo, setTodo] = useState([])
+const DisplayTable = ({ todo, handleOnDelete}) => {
+ 
   
-  const fetchData = async()=>{
-      const q = query(collection(db, 'todos'))
-      const querySnapshot = await getDocs(q)
-      const todosData = []
-      querySnapshot.forEach((doc)=>{
-          let data = doc.data()
-          todosData.push(data)
-         
-         
-         
-      })
-      setTodo(todosData)
-      console.log(todo)
-  }
-  console.log(todo)
-useEffect(()=>{
-  fetchData()
 
-},[])
   return (
     <div className="table p-2 ">
         <Table striped bordered hover className='mt-5'>
@@ -46,7 +28,7 @@ useEffect(()=>{
              <td>{i+1}</td>
              <td>{item.todo}</td>
              <td>{item.date}</td>
-             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/`}><i class="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(item.i)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
+             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/`}><i class="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(item.id)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
            </tr>
 
         ))}

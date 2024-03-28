@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import "../App.css"
 import DisplayTable from './DisplayTable'
 import { toast } from 'react-toastify'
 import { addDoc, collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore'
 import { db } from '../firebase-config/firebaseConfig'
+import { randomStrGenerator } from '../utils'
 
 let globalId = 0
 const initialState = {
@@ -16,29 +17,29 @@ const initialState = {
 const InputForm = () => {
     const [formData, setFormData] = useState(initialState)
     const [toDo, setToDO] = useState([])
- 
+    const [value, setValue] = useState([])
     
-    // useEffect(async()=>{
-    //     const fetchData = async()=>{
-    //         try {
-    //             const q = query(collection(db, 'todos'))
-    //             const querySnapshot = await getDocs(q)
-    //             console.log(querySnapshot)
-    //             querySnapshot.forEach((doc)=>{
-    //                 const {id} = doc
-    //             const data = {...doc.data(),id}
-    //             console.log(data)
-               
-    //            })
-    //         } catch (error) {
-    //             console.log(error.message)
-                
-    //         }
-    //     }
-    //     fetchData()
-
-    // },[])
+    
    
+    const fetchData = async()=>{
+        const q = query(collection(db, 'todos'))
+        const querySnapshot = await getDocs(q)
+        const todosData = []
+        querySnapshot.forEach((doc)=>{
+            let data = doc.data()
+            todosData.push(data)
+           
+           
+           
+        })
+        setValue(todosData)
+        
+    }
+    
+  useEffect(()=>{
+    fetchData()
+  
+  },[toDo])
 
  
     
@@ -48,7 +49,8 @@ const InputForm = () => {
     }
     const handleOnsubmit = async (e) => {
         e.preventDefault()
-        const obj = { ...formData, id: globalId++, createdAt: Date.now() }
+        
+        const obj = { ...formData, id: randomStrGenerator(6), createdAt: Date.now() }
         setToDO([...toDo, obj])
         const docRef = await addDoc(collection(db, 'todos'), obj)
         if(docRef?.id){
@@ -56,16 +58,20 @@ const InputForm = () => {
             return toast.success("The Todo is created!!")
         }     
     }
-    
+    console.log(toDo)
 
-    const handleOnDelete = async (id)=>{
-        if(window.confirm("Are you sure you want to delete this todo??")){
-           try {
-            await deleteDoc(doc(db, 'todos', id))
-            toast.success("The todo is deleted!!")
-           } catch (error) {
-            toast.error(error.message)
-           }
+    const handleOnDelete = async (id) => {
+        const docRef = doc(db, 'todos', id);
+        console.log("Deleting document with ID:", id);
+        if (window.confirm("Are you sure you want to delete this?")) {
+            try {
+                await deleteDoc(docRef);
+                toast.success("Todo has been deleted");
+                fetchData();
+            } catch (error) {
+                console.error("Error deleting document:", error);
+                toast.error("Failed to delete todo: " + error.message); // Display error message
+            }
         }
     }
     console.log(toDo)
@@ -93,7 +99,7 @@ const InputForm = () => {
             <span className="d-block p-1 bg-info "></span>
             <div className="display">
 
-                <DisplayTable  handleOnDelete={handleOnDelete} />
+                <DisplayTable todo={value} handleOnDelete={handleOnDelete} />
 
 
             </div>
