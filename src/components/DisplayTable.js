@@ -24,11 +24,11 @@ const DisplayTable = ({ todo, handleOnDelete}) => {
       </thead>
       <tbody>
         {todo.map((item,i)=>(
-           <tr >
+           <tr key={i} >
              <td>{i+1}</td>
              <td>{item.todo}</td>
              <td>{item.date}</td>
-             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/`}><i class="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(item.id)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
+             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/`}><i className="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(item.id)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
            </tr>
 
         ))}

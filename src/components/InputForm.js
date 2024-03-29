@@ -3,7 +3,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import "../App.css"
 import DisplayTable from './DisplayTable'
 import { toast } from 'react-toastify'
-import { addDoc, collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc } from 'firebase/firestore'
 import { db } from '../firebase-config/firebaseConfig'
 import { randomStrGenerator } from '../utils'
 
@@ -26,8 +26,7 @@ const InputForm = () => {
         const querySnapshot = await getDocs(q)
         const todosData = []
         querySnapshot.forEach((doc)=>{
-            let data = doc.data()
-            todosData.push(data)
+            todosData.push({id: doc.id,...doc.data()})
            
            
            
@@ -50,7 +49,7 @@ const InputForm = () => {
     const handleOnsubmit = async (e) => {
         e.preventDefault()
         
-        const obj = { ...formData, id: randomStrGenerator(6), createdAt: Date.now() }
+        const obj = { ...formData, createdAt: Date.now() }
         setToDO([...toDo, obj])
         const docRef = await addDoc(collection(db, 'todos'), obj)
         if(docRef?.id){
@@ -61,18 +60,19 @@ const InputForm = () => {
     console.log(toDo)
 
     const handleOnDelete = async (id) => {
-        const docRef = doc(db, 'todos', id);
-        console.log("Deleting document with ID:", id);
+       
         if (window.confirm("Are you sure you want to delete this?")) {
-            try {
-                await deleteDoc(docRef);
-                toast.success("Todo has been deleted");
-                fetchData();
-            } catch (error) {
-                console.error("Error deleting document:", error);
-                toast.error("Failed to delete todo: " + error.message); // Display error message
-            }
-        }
+                 try {
+                    await deleteDoc(doc(db, 'todos', id));
+                     toast.success("Todo has been deleted");
+                    fetchData();
+                 } catch (error) {
+                     console.error("Error deleting document:", error);
+                    toast.error("Failed to delete todo: " + error.message); // Display error message
+                 }
+             }
+        
+       
     }
     console.log(toDo)
 
