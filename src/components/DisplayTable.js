@@ -4,11 +4,11 @@ import { Button, Table } from 'react-bootstrap'
 
 import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase-config/firebaseConfig'
+import { useDispatch, useSelector } from 'react-redux'
 
-const DisplayTable = ({ todo, handleOnDelete}) => {
- 
-  
-
+const DisplayTable = ({handleOnDelete}) => {
+  const {todoData} = useSelector(state=>state.todo)
+console.log(todoData)
   return (
     <div className="table p-2 ">
         <Table striped bordered hover className='mt-5'>
@@ -23,12 +23,12 @@ const DisplayTable = ({ todo, handleOnDelete}) => {
         </tr>
       </thead>
       <tbody>
-        {todo.map((item,i)=>(
+        {todoData.map((item,i)=>(
            <tr key={i} >
              <td>{i+1}</td>
              <td>{item.todo}</td>
              <td>{item.date}</td>
-             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/`}><i className="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(item.id)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
+             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/${item.id}`}><i className="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(item.id)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
            </tr>
 
         ))}

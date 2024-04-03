@@ -6,6 +6,8 @@ import { toast } from 'react-toastify'
 import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc } from 'firebase/firestore'
 import { db } from '../firebase-config/firebaseConfig'
 import { randomStrGenerator } from '../utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { createTodo } from '../redux/todoSlice'
 
 let globalId = 0
 const initialState = {
@@ -18,27 +20,42 @@ const InputForm = () => {
     const [formData, setFormData] = useState(initialState)
     const [toDo, setToDO] = useState([])
     const [value, setValue] = useState([])
-    
-    
+    const dispatch = useDispatch()
    
-    const fetchData = async()=>{
-        const q = query(collection(db, 'todos'))
-        const querySnapshot = await getDocs(q)
-        const todosData = []
-        querySnapshot.forEach((doc)=>{
-            todosData.push({id: doc.id,...doc.data()})
-           
-           
-           
-        })
-        setValue(todosData)
-        
-    }
+
+    useEffect(()=>{
+        dispatch(createTodo(toDo))
+    },[toDo,dispatch])
+    // const fetchData = async()=>{
     
-  useEffect(()=>{
-    fetchData()
-  
-  },[toDo])
+    //     const q = query(collection(db, 'todos'))
+    //     const querySnapshot = await getDocs(q)
+    //     const todosData = []
+    //     querySnapshot.forEach((doc)=>{
+    //         todosData.push({id: doc.id,...doc.data()})
+           
+           
+           
+    //     })
+    //     setValue(todosData)
+        
+    // }
+    
+    // const handleOnDelete = async (id) => {
+       
+    //     if (window.confirm("Are you sure you want to delete this?")) {
+    //             //  try {
+    //             //     await deleteDoc(doc(db, 'todos', id));
+    //             //      toast.success("Todo has been deleted");
+    //             //     fetchData();
+    //             //  } catch (error) {
+    //             //      console.error("Error deleting document:", error);
+    //             //     toast.error("Failed to delete todo: " + error.message); // Display error message
+    //             //  }
+    //          }
+        
+       
+    // }
 
  
     
@@ -48,32 +65,22 @@ const InputForm = () => {
     }
     const handleOnsubmit = async (e) => {
         e.preventDefault()
-        
+    
         const obj = { ...formData, createdAt: Date.now() }
         setToDO([...toDo, obj])
-        const docRef = await addDoc(collection(db, 'todos'), obj)
-        if(docRef?.id){
-            setFormData(initialState)
-            return toast.success("The Todo is created!!")
-        }     
+        
+        //const docRef = await addDoc(collection(db, 'todos'), obj)
+        // if(docRef?.id){
+        //     setFormData(initialState)
+           
+        //     return toast.success("The Todo is created!!")
+        // }     
     }
+
+   
     console.log(toDo)
 
-    const handleOnDelete = async (id) => {
-       
-        if (window.confirm("Are you sure you want to delete this?")) {
-                 try {
-                    await deleteDoc(doc(db, 'todos', id));
-                     toast.success("Todo has been deleted");
-                    fetchData();
-                 } catch (error) {
-                     console.error("Error deleting document:", error);
-                    toast.error("Failed to delete todo: " + error.message); // Display error message
-                 }
-             }
-        
-       
-    }
+   
     console.log(toDo)
 
 
@@ -83,9 +90,9 @@ const InputForm = () => {
     return (
         <div className=" ">
             <Form onSubmit={handleOnsubmit} className='wrapper p-4 text-center d-flex align-items-center justify-content-center' >
-                <Row  >
-                    <Col md={6} >
-                        <Form.Control required value={formData.todo} name='todo' placeholder="Enter Your ToDo here ..." onChange={handleOnchange} />
+                <Row className='gap-2' >
+                    <Col md={4} >
+                        <Form.Control required value={formData.todo} name='todo' placeholder="Enter Your ToDo..." onChange={handleOnchange} />
                     </Col>
                     <Col md={4} >
                         <Form.Control required type='date' value={formData.date} name='date' placeholder="Date" onChange={handleOnchange} />
@@ -97,12 +104,7 @@ const InputForm = () => {
                 </Row>
             </Form>
             <span className="d-block p-1 bg-info "></span>
-            <div className="display">
-
-                <DisplayTable todo={value} handleOnDelete={handleOnDelete} />
-
-
-            </div>
+            
         </div>
 
     )
