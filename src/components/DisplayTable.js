@@ -5,10 +5,18 @@ import { Button, Table } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase-config/firebaseConfig'
 import { useDispatch, useSelector } from 'react-redux'
+import { createTodo } from '../redux/todoSlice'
 
-const DisplayTable = ({handleOnDelete}) => {
+const DisplayTable = () => {
   const {todoData} = useSelector(state=>state.todo)
+  const dispatch = useDispatch()
 console.log(todoData)
+
+const handleOnDelete = (id)=>{
+  const filteredTodo = todoData.filter((item,i)=>i !== id)
+  dispatch(createTodo(filteredTodo))
+
+}
   return (
     <div className="table p-2 ">
         <Table striped bordered hover className='mt-5'>
@@ -28,7 +36,7 @@ console.log(todoData)
              <td>{i+1}</td>
              <td>{item.todo}</td>
              <td>{item.date}</td>
-             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/${item.id}`}><i className="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(item.id)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
+             <td className='text-center'><Link  title='Update' className='m-1' to={`/update/${item.id}`}><i className="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={()=>handleOnDelete(i)}    variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
            </tr>
 
         ))}
