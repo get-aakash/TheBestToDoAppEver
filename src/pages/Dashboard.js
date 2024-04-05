@@ -9,10 +9,8 @@ import DisplayTable from '../components/DisplayTable'
 const Dashboard = () => {
   return (
     <DefaultLayout>
-      <InputForm />
-      <div className="display">
-        <DisplayTable />
-      </div>
+      <InputForm  />
+      
     </DefaultLayout>
   )
 }

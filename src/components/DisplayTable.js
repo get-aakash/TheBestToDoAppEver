@@ -7,16 +7,18 @@ import { db } from '../firebase-config/firebaseConfig'
 import { useDispatch, useSelector } from 'react-redux'
 import { createTodo } from '../redux/todoSlice'
 
-const DisplayTable = () => {
-  const {todoData} = useSelector(state=>state.todo)
+const DisplayTable = ({todoData, handleOnDelete}) => {
+  
+
   const dispatch = useDispatch()
 console.log(todoData)
 
-const handleOnDelete = (id)=>{
-  const filteredTodo = todoData.filter((item,i)=>i !== id)
-  dispatch(createTodo(filteredTodo))
 
-}
+
+  
+  
+
+
   return (
     <div className="table p-2 ">
         <Table striped bordered hover className='mt-5'>

@@ -21,11 +21,21 @@ const InputForm = () => {
     const [toDo, setToDO] = useState([])
     const [value, setValue] = useState([])
     const dispatch = useDispatch()
+    const {todoData} = useSelector(state=>state.todo)
    
 
     useEffect(()=>{
         dispatch(createTodo(toDo))
     },[toDo,dispatch])
+
+    const handleOnDelete = (id)=>{
+        if(window.confirm("Are you sure to delete this todo?")){
+          const filteredTodo = toDo.filter((item,i)=>i !== id)
+          setToDO(filteredTodo)
+          console.log(filteredTodo)
+          dispatch(createTodo(filteredTodo))
+        }
+    }
     // const fetchData = async()=>{
     
     //     const q = query(collection(db, 'todos'))
@@ -104,6 +114,9 @@ const InputForm = () => {
                 </Row>
             </Form>
             <span className="d-block p-1 bg-info "></span>
+            <div className="display">
+        <DisplayTable handleOnDelete = {handleOnDelete} todoData={todoData} />
+      </div>
             
         </div>
 
