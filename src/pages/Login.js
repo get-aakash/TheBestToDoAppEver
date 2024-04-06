@@ -36,7 +36,7 @@ const Login = () => {
 })
   useEffect(()=>{
     userInfo?.uid && navigate("/dashboard")
-  },[])
+  },[userInfo])
 
 
 
