@@ -79,6 +79,7 @@ const InputForm = () => {
         const obj = { ...formData, createdAt: Date.now() }
         setToDO([...toDo, obj])
         setFormData(initialState)
+    
         //const docRef = await addDoc(collection(db, 'todos'), obj)
         // if(docRef?.id){
         //     setFormData(initialState)
