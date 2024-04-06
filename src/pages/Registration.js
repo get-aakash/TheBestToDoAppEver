@@ -7,11 +7,14 @@ import { useNavigate } from 'react-router-dom'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth, db } from '../firebase-config/firebaseConfig'
 import { doc, setDoc } from 'firebase/firestore'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../redux/userSlice'
 
 const Registration = () => {
   const [formData, setFormData] = useState({})
   const [error, setError] = useState("")
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
 
   const inputs = [
@@ -94,6 +97,7 @@ const Registration = () => {
       }
       await setDoc(doc(db,"users", user.uid),userObj)
       toast.success("Your account is created and redirecting to the dashboard")
+      dispatch(setUser({...userObj, uid: user.uid}))
       navigate("/dashboard")
     } catch (error) {
       let msg = error.message
