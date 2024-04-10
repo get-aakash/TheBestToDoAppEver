@@ -6,6 +6,31 @@ import { toast } from 'react-toastify'
 const PasswordResetForm = () => {
     const [formData, setFormData] = useState({})
     const [error, setError] = useState("")
+    const inputs = [
+        {
+          label: "Email",
+          name: 'email',
+          type: 'email',
+          required: true,
+          placeholder: "sam@sam.com"
+        },
+        {
+          label: "Password",
+          name: 'password',
+          type: 'password',
+          required: true,
+          placeholder: "******"
+    
+        },
+        {
+          label: "Confirm Password",
+          name: 'cpassword',
+          type: 'password',
+          required: true,
+          placeholder: "******"
+    
+        }
+      ]
     const handleOnChange = (e) =>{
         const {name, value} = e.target
         if(name === "password"){
@@ -30,13 +55,13 @@ const PasswordResetForm = () => {
     }
   return (
     <div className='bordder p-4 py-4 bg-light rounded shadow-lg'>
-        <h3 className="text-center">Reset Your Password!!!</h3>
+        <div className="constainer">
+<h3 className="text-center">Reset Your Password!!!</h3>
         <hr />
 
-        <Form onSubmit={handleOnSubmit}>
-            <CustomInput label="Email *" type="email" name="email" placeholder="sam@sam.com" required={true} onChange={handleOnChange}/>
-            <CustomInput label="New Password *" type='password' name="password" placeholder="****" required={true} onChange={handleOnChange} />
-            <CustomInput label="Confirm Password *" type='password' name="cpassword" placeholder="****" required={true} onChange={handleOnChange} />
+        <Form  onSubmit={handleOnSubmit}>
+            {inputs.map((item,i)=><CustomInput key={i} {...item} onChange={handleOnChange} />)}
+            
             <Form.Text>
                 Password should contain atleast 6 characters, one upper case lower case and number !!!
            {error && <ul>
@@ -51,6 +76,8 @@ const PasswordResetForm = () => {
             </div>
             
         </Form>
+        </div>
+        
       
     </div>
   )

@@ -8,6 +8,7 @@ import { db } from '../firebase-config/firebaseConfig'
 import { randomStrGenerator } from '../utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { createTodo } from '../redux/todoSlice'
+import { getTodos } from '../redux/todos'
 
 let globalId = 0
 const initialState = {
@@ -23,53 +24,14 @@ const InputForm = () => {
     const dispatch = useDispatch()
     
     const {userInfo} = useSelector(state=>state.user)
-   
+
 
     useEffect(()=>{
         dispatch(createTodo(toDo))
         
     },[toDo,dispatch])
 
-    // const handleOnDelete = (id)=>{
-    //     if(window.confirm("Are you sure to delete this todo?")){
-    //       const filteredTodo = toDo.filter((item,i)=>i !== id)
-    //       setToDO(filteredTodo)
-    //       console.log(filteredTodo)
-    //       dispatch(createTodo(filteredTodo))
-    //     }
-    // }
-    // const fetchData = async()=>{
     
-    //     const q = query(collection(db, 'todos'))
-    //     const querySnapshot = await getDocs(q)
-    //     const todosData = []
-    //     querySnapshot.forEach((doc)=>{
-    //         todosData.push({id: doc.id,...doc.data()})
-           
-           
-           
-    //     })
-    //     setValue(todosData)
-        
-    // }
-    
-    // const handleOnDelete = async (id) => {
-       
-    //     if (window.confirm("Are you sure you want to delete this?")) {
-    //             //  try {
-    //             //     await deleteDoc(doc(db, 'todos', id));
-    //             //      toast.success("Todo has been deleted");
-    //             //     fetchData();
-    //             //  } catch (error) {
-    //             //      console.error("Error deleting document:", error);
-    //             //     toast.error("Failed to delete todo: " + error.message); // Display error message
-    //             //  }
-    //          }
-        
-       
-    // }
-
- 
     
     const handleOnchange = (e) => {
         const { name, value } = e.target
@@ -85,7 +47,7 @@ const InputForm = () => {
         const docRef = await addDoc(collection(db, 'todos'), obj)
         if(docRef?.id){
             setFormData(initialState)
-           
+           dispatch(getTodos(userInfo.uid))
             return toast.success("The Todo is created!!")
         }     
     }

@@ -51,7 +51,7 @@ const handleOnDelete = async(id)=>{
               <td>{i + 1}</td>
               <td>{item.todo}</td>
               <td>{item.date}</td>
-              <td className='text-center'><Link title='Update' className='m-1' to={`/update/${item.id}`}><i className="fa-solid fa-pen-to-square"></i></Link><Button title='Delete' onClick={() => handleOnDelete(item.id)} variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
+              <td className='text-center gap-3'><Link title='Update' className='m-1' to={`/update/${item.id}`}><i className="fa-solid fa-pen-to-square"></i></Link><Link title='Delete'  onClick={() => handleOnDelete(item.id)}  ><i className="fa-solid fa-trash blackColor"></i></Link></td>
             </tr>
 
           ))}
