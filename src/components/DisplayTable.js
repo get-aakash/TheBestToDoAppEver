@@ -6,15 +6,17 @@ import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase-config/firebaseConfig'
 import { useDispatch, useSelector } from 'react-redux'
 import { createTodo } from '../redux/todoSlice'
+import {getTodos} from '../redux/todos'
 
-const DisplayTable = ({todoData, handleOnDelete}) => {
-  
-
+const DisplayTable = ({ handleOnDelete}) => {
   const dispatch = useDispatch()
-console.log(todoData)
+  const {todoData} = useSelector(state=>state.todo)
+const {userInfo} = useSelector(state=>state.user)
 
-
-
+useEffect(()=>{
+  console.log(userInfo.uid)
+  dispatch(getTodos(userInfo.uid))
+},[dispatch])
   
   
 

@@ -10,7 +10,9 @@ const Dashboard = () => {
   return (
     <DefaultLayout>
       <InputForm  />
-      
+      <div className="display">
+        <DisplayTable  />
+      </div>
     </DefaultLayout>
   )
 }

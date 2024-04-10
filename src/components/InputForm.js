@@ -21,21 +21,23 @@ const InputForm = () => {
     const [toDo, setToDO] = useState([])
     const [value, setValue] = useState([])
     const dispatch = useDispatch()
-    const {todoData} = useSelector(state=>state.todo)
+    
+    const {userInfo} = useSelector(state=>state.user)
    
 
     useEffect(()=>{
         dispatch(createTodo(toDo))
+        
     },[toDo,dispatch])
 
-    const handleOnDelete = (id)=>{
-        if(window.confirm("Are you sure to delete this todo?")){
-          const filteredTodo = toDo.filter((item,i)=>i !== id)
-          setToDO(filteredTodo)
-          console.log(filteredTodo)
-          dispatch(createTodo(filteredTodo))
-        }
-    }
+    // const handleOnDelete = (id)=>{
+    //     if(window.confirm("Are you sure to delete this todo?")){
+    //       const filteredTodo = toDo.filter((item,i)=>i !== id)
+    //       setToDO(filteredTodo)
+    //       console.log(filteredTodo)
+    //       dispatch(createTodo(filteredTodo))
+    //     }
+    // }
     // const fetchData = async()=>{
     
     //     const q = query(collection(db, 'todos'))
@@ -75,24 +77,22 @@ const InputForm = () => {
     }
     const handleOnsubmit = async (e) => {
         e.preventDefault()
-    
-        const obj = { ...formData, createdAt: Date.now() }
+        
+        const obj = { ...formData, createdAt: Date.now(), uid: userInfo.uid }
         setToDO([...toDo, obj])
-        setFormData(initialState)
+       
     
-        //const docRef = await addDoc(collection(db, 'todos'), obj)
-        // if(docRef?.id){
-        //     setFormData(initialState)
+        const docRef = await addDoc(collection(db, 'todos'), obj)
+        if(docRef?.id){
+            setFormData(initialState)
            
-        //     return toast.success("The Todo is created!!")
-        // }     
+            return toast.success("The Todo is created!!")
+        }     
     }
 
    
-    console.log(toDo)
-
-   
-    console.log(toDo)
+    
+    
 
 
 
@@ -115,9 +115,7 @@ const InputForm = () => {
                 </Row>
             </Form>
             <span className="d-block p-1 bg-info "></span>
-            <div className="display">
-        <DisplayTable handleOnDelete = {handleOnDelete} todoData={todoData} />
-      </div>
+            
             
         </div>
 
