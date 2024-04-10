@@ -68,7 +68,7 @@ const InputForm = () => {
                         <Form.Control required value={formData.todo} name='todo' placeholder="Enter Your ToDo..." onChange={handleOnchange} />
                     </Col>
                     <Col md={4} >
-                        <Form.Control required type='date' value={formData.date} name='date' placeholder="Date" onChange={handleOnchange} />
+                        <Form.Control required type='date' placeholder="Select a date.." value={formData.date} name='date' placeholder="Date" onChange={handleOnchange} />
                     </Col>
                     <Col md={2}>
                         <Button type='submit' variant='success'>Create</Button>
